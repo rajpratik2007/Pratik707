@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAPITAL | 3D Luxury Apparel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #060a13;
+            --glass: rgba(19, 27, 46, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --gold: #c5a880;
+            --white: #ffffff;
+            --text: #8fa0bc;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--bg); color: var(--white); scroll-behavior: smooth; overflow-x: hidden; position: relative; }
+        
+        /* Premium Red, White, Blue Ribbon Strip on the Right Edge */
+        .brand-strip {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 12px;
+            height: 100vh;
+            display: flex;
+            z-index: 9999;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+        }
+        .strip-red { flex: 1; background: #cc1f29; }
+        .strip-white { flex: 1; background: #ffffff; }
+        .strip-blue { flex: 1; background: #002f6c; }
+
+        /* Header Section */
+        header { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; background: rgba(6, 10, 19, 0.85); backdrop-filter: blur(15px); z-index: 100; border-bottom: 1px solid rgba(197, 168, 128, 0.1); padding-right: calc(5% + 12px); }
+        .nav-links a { color: var(--text); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; text-decoration: none; margin-right: 20px; transition: 0.3s; cursor: pointer; }
+        .nav-links a:hover { color: var(--gold); }
+        .brand-logo { font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 800; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; }
+        
+        /* Hero Section */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; background: linear-gradient(rgba(6, 10, 13, 0.5), rgba(6, 10, 19, 0.95)), url('https://createfashionbrand.com/wp-content/uploads/2023/12/DSC04172-scaled.jpg') center/cover no-repeat; padding-right: calc(20px + 12px); }
+        .hero h1 { font-family: 'Cinzel', serif; font-size: 2.5rem; margin-bottom: 20px; line-height: 1.4; text-shadow: 0 4px 15px rgba(0,0,0,0.8); }
+        .btn-explore { font-family: 'Montserrat', sans-serif; background: var(--gold); color: var(--bg); border: none; padding: 15px 35px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
+        .btn-explore:hover { background: transparent; color: var(--gold); border: 1px solid var(--gold); transform: scale(1.05); }
+        
+        /* Shop Section */
+        .shop { padding: 100px 5%; background: #04070d; position: relative; padding-right: calc(5% + 12px); }
+        .tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; }
+        .tab-btn { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text); padding: 10px 25px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
+        .tab-btn.active, .tab-btn:hover { background: var(--white); color: var(--bg); font-weight: 600; }
+        
+        /* 3D Liquid Glass Grid Container */
+        .grid { display: none; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; perspective: 1000px; }
+        .grid.active { display: grid; }
+        
+        /* 3D Liquid Glass Card Appearance & Animation */
+        .card { 
+            background: var(--glass); 
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            padding: 20px; 
+            border-radius: 16px; 
+            text-align: center; 
+            border: 1px solid var(--glass-border); 
+            cursor: pointer;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s, border-color 0.3s;
+            transform-style: preserve-3d;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .card:hover { 
+            transform: translateY(-10px) rotateX(10px) rotateY(-5px); 
+            border-color: rgba(197, 168, 128, 0.4); 
+            box-shadow: 0 20px 40px rgba(197, 168, 128, 0.15), 0 30px 60px rgba(0,0,0,0.6);
+        }
+        
+        /* Liquid Image Box */
+        .img-box { 
+            height: 280px; 
+            width: 100%; 
+            margin-bottom: 20px; 
+            overflow: hidden; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative;
+            transform: translateZ(20px);
+            border: 1px solid rgba(255,255,255,0.05);
+            background: #0d1527;
+        }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .card:hover .img-box img { transform: scale(1.08); }
+
+        .title { font-size: 1.1rem; text-transform: uppercase; margin-bottom: 8px; font-weight: 600; letter-spacing: 1px; color: var(--white); transform: translateZ(15px); }
+        .price { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1.3rem; font-weight: 700; transform: translateZ(10px); }
+
+        /* Detail Modal Popup Window styling */
+        .p-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 5, 10, 0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
+        .p-modal-content { 
+            background: #101726; 
+            border: 1px solid var(--gold); 
+            max-width: 700px; 
+            width: 90%; 
+            border-radius: 16px; 
+            padding: 30px; 
+            position: relative; 
+            display: flex; 
+            gap: 30px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+            animation: modalFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes modalFade {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; color: var(--text); cursor: pointer; transition: 0.3s; }
+        .modal-close:hover { color: var(--white); }
+        .m-left { flex: 1; height: 350px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .m-left img { width: 100%; height: 100%; object-fit: cover; }
+        .m-right { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .m-right h3 { font-family: 'Cinzel', serif; font-size: 1.6rem; color: var(--white); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .m-right .m-desc { font-size: 0.85rem; color: var(--text); line-height: 1.6; margin-bottom: 20px; }
+        .m-right .m-price { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--gold); font-weight: 700; margin-bottom: 25px; }
+        .m-cart-btn { background: var(--gold); color: var(--bg); border: none; width: 100%; padding: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; border-radius: 4px; font-size: 0.85rem; }
+        .m-cart-btn:hover { background: var(--white); transform: translateY(-2px); }
+
+        /* Comments Engine */
+        .comment-section { padding: 60px 5%; background-color: var(--bg); border-top: 1px solid rgba(197, 168, 128, 0.1); padding-right: calc(5% + 12px); }
+        .comment-section h2 { font-family: 'Cinzel', serif; text-align: center; margin-bottom: 30px; letter-spacing: 2px; }
+        .comment-form { max-width: 600px; margin: 0 auto 40px auto; display: flex; flex-direction: column; gap: 15px; }
+        .comment-form input, .comment-form textarea { width: 100%; background: #131b2e; border: 1px solid rgba(255,255,255,0.1); padding: 12px; color: var(--white); font-family: 'Montserrat', sans-serif; border-radius: 6px; }
+        .comment-form input:focus, .comment-form textarea:focus { border-color: var(--gold); outline: none; }
+        .submit-btn { background: var(--gold); color: var(--bg); border: none; padding: 12px; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: 0.3s; border-radius: 4px; }
+        .submit-btn:hover { background: var(--white); }
+        .comments-list { max-width: 600px; margin: 30px auto 0 auto; display: flex; flex-direction: column; gap: 15px; }
+        .comment-item { background: #131b2e; padding: 15px; border-left: 3px solid var(--gold); border-radius: 4px; }
+        .comment-meta { font-size: 0.8rem; color: var(--gold); font-weight: 600; margin-bottom: 5px; display: flex; justify-content: space-between; }
+        
+        /* Modal Info Box */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-content { background: #131b2e; padding: 40px; border-radius: 12px; border: 1px solid var(--gold); max-width: 500px; width: 90%; position: relative; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; color: var(--text); cursor: pointer; }
+        .modal h3 { font-family: 'Cinzel', serif; margin-bottom: 20px; color: var(--gold); }
+        .faq-item { margin-bottom: 15px; }
+        .faq-item h4 { font-size: 0.9rem; margin-bottom: 5px; }
+        .faq-item p { font-size: 0.8rem; color: var(--text); line-height: 1.5; }
+        .support-link { color: var(--gold); font-weight: 600; text-decoration: none; border-bottom: 1px dashed var(--gold); }
+
+        @media (max-width: 768px) {
+            .p-modal-content { flex-direction: column; padding: 20px; gap: 20px; }
+            .m-left { height: 200px; }
+            .brand-strip { width: 9px; }
+            header, .hero, .shop, .comment-section { padding-right: calc(5% + 9px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Red, White, Blue Tri-Color Vertical Ribbon Strip on Right Border -->
+    <div class="brand-strip">
+        <div class="strip-red"></div>
+        <div class="strip-white"></div>
+        <div class="strip-blue"></div>
+    </div>
+
+    <header>
+        <div class="nav-links">
+            <a onclick="toggleHelp(true)">Help</a>
+            <a href="#shop">Collection</a>
+            <a onclick="document.getElementById('comment-section').scrollIntoView({behavior: 'smooth'})">Comment</a>
+        </div>
+        <div class="brand-logo">CAPITAL</div>
+    </header>
+
+    <section class="hero">
+        <h1>Command Your Style.<br>Be The Captain Of Your Wardrobe.</h1>
+        <button class="btn-explore" onclick="document.getElementById('shop').scrollIntoView({behavior: 'smooth'})">Explore Collection</button>
+    </section>
+
+    <section class="shop" id="shop">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="show('men')">Men</button>
+            <button class="tab-btn" onclick="show('women')">Women</button>
+            <button class="tab-btn" onclick="show('kids')">Kids</button>
+        </div>
+
+        <!-- MEN 3D DECK -->
+        <div class="grid active" id="men">
+            <div class="card" onclick="openOverview('Voyage Tee', 'Heavyweight premium drop-shoulder street silhouette engineered with luxury hand-spun organic cotton.', '₹2,500', 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=500&q=80')">
+                <div class="img-box"><img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=500&q=80" alt="Voyage Tee"></div>
+                <div class="title">Voyage Tee</div>
+                <div class="price">₹2,500</div>
+            </div>
+            <div class="card" onclick="openOverview('Linen Shirt', 'Bespoke textured premium organic linen shirt designed for ultimate breathability and class.', '₹4,200', 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=500&q=80')">
+                <div class="img-box"><img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=500&q=80" alt="Linen Shirt"></div>
+                <div class="title">Linen Shirt</div>
+                <div class="price">₹4,200</div>
+            </div>
+            <div class="card" onclick="openOverview('Anchor Hoodie', 'Luxury 450 GSM custom double-lined ultra-heavy cotton streetwear statement masterpiece.', '₹6,800', 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=500&q=80')">
+                <div class="img-box"><img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=500&q=80" alt="Anchor Hoodie"></div>
+                <div class="title">Anchor Hoodie</div>
+                <div class="price">₹6,800</div>
+            </div>
+            <div class="card" onclick="openOverview('Yacht Jacket', 'Water-resistant windproof high-neck technical outerwear pullover engineered for maritime climates.', '₹8,900', 'https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=500&q=80')">
+                <div class="img-box"><img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=500&q=80" alt="Yacht Jacket"></div>
+                <div class="title">Yacht Jacket</div>
+                <div class="price">₹8,900</div>
+            </div>
+        </div>
+
+        <!-- WOMEN 3D DECK -->
+        <div class="grid" id="women">
+            <div class="card" onclick="openOverview('Silk Top', 'Double-layered premium minimalist pure mulberry silk top with a signature tailored finish.', '₹3,400', 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=500&q=80')">
+                <div class="img-box"><img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=500&q=80" alt="Silk Top"></div>
+                <div class="title">Silk Top</div>
+                <div class="price">₹3,400</div>
+            </div>
+            <div class="card" onclick="openOverview('Maritime Knit', 'Relaxed luxury knit loose fitting lounge aesthetic premium pullover sweater.', '₹4,900', 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=500&q=80')">
+                <div class="img-box"><img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=500&q=80" alt="Maritime Knit"></div>
+                <div class="title">Maritime Knit</div>
+                <div class="price">₹4,900</div>
+            </div>
+            <div class="card" onclick="openOverview('Satin Blazer', 'Sharp structured couture statement casual luxury corporate satin blazer jacket.', '₹7,500', 'https://images.unsplash.com/photo-1548624313-0396c75e4b1a?auto=format&fit=crop&w=500&q=80')">
+                <div class="img-box"><img src="https://images.unsplash.com/photo-1548624313-0396c75e4b1a?auto=format&fit=crop&w=500&q=80" alt="Satin Blazer"></div>
+                <div class="title">Satin Blazer</div>
+                <div class="price">₹7,500</div>
+            </div>
+            <div class="card" onclick="openOverview('Trench Shirt', 'Tailored high-end street tunic complete with handcrafted polished gold metallic signature accents.', '₹8,200', 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?auto=format&fit=crop&w=500&q=80')">
+                <div class="img-box"><img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?auto=format&fit=crop&w=500&q=80" alt="Trench Shirt"></div>
+                <div class="title">Trench Shirt</div>
+                <div class="price">₹8,200</div>
+            </div>
+        </div>
+
+        <!-- KIDS 3D DECK -->
+        <div class="grid" id="kids">
+            <div class="card" onclick="openOverview('Sailor Tee', '100% organic ultra-soft long-staple cotton essential structured for daily active play.', '₹2,600', 'https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=500&q=80')">
+                <div class="img-box"><img src="https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=500&q=80" alt="Sailor Tee"></div>
+                <div class="title">Sailor Tee</div>
+                <div class="price">₹2,600</div>
+            </div>
+            <div class="card" onclick="openOverview('Emblem Polo', 'High-grade miniature weave heavy stitch comfort-focused signature luxury polo.', '₹3,200', 'https://images.unsplash.com/photo-1622296089863-eb7fc530daa8?auto=format&fit=crop&w=500&q=80')">
+                <div class="img-box"><img src="https://images.unsplash.com/photo-1622296089863-eb7fc530daa8?auto=format&fit=crop&w=500&q=80" alt="Emblem Polo"></div>
+                <div class="title">Emblem Polo</div>
+                <div class="price">₹3,200</div>
+            </div>
+            <div class="card" onclick="openOverview('Mini Hoodie', 'Thick fleece premium variant for junior active seasonal layered styling.', '₹4,800', 'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=500&q=80')">
+                <div class="img-box"><img src="https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=500&q=80" alt="Mini Hoodie"></div>
+                <div class="title">Mini Hoodie</div>
+                <div class="price">₹4,800</div>
+            </div>
+            <div class="card" onclick="openOverview('Varsity Bomber', 'Dynamic luxury streetwear aesthetic bomber jacket complete with contrast embroidery.', '₹5,900', 'https://images.unsplash.com/photo-1607990283143-e81e7a2c93ab?auto=format&fit=crop&w=500&q=80')">
+                <div class="img-box"><img src="https://images.unsplash.com/photo-1607990283143-e81e7a2c93ab?auto=format&fit=crop&w=500&q=80" alt="Varsity Bomber"></div>
+                <div class="title">Varsity Bomber</div>
+                <div class="price">₹5,900</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCT DETAIL OVERVIEW MODAL BOX Layout -->
+    <div class="p-modal" id="overviewModal">
+        <div class="p-modal-content">
+            <span class="modal-close" onclick="closeOverview()">&times;</span>
+            <div class="m-left">
+                <img id="modalImg" src="" alt="Overview Product Image">
+            </div>
+            <div class="m-right">
+                <h3 id="modalTitle">Product Title</h3>
+                <p class="m-desc" id="modalDesc">Detailed garment explanation description text goes here.</p>
+                <p class="m-price" id="modalPrice">₹0,000</p>
+                <button class="m-cart-btn" onclick="triggerWorkInPrg()">Add To Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMMENTS ENGINE -->
+    <section class="comment-section" id="comment-section">
+        <h2>Customer Intel & Comments</h2>
+        <div class="comment-form">
+            <input type="text" id="username" placeholder="Your Name" required>
+            <textarea id="commentText" rows="4" placeholder="Leave your feedback..." required></textarea>
+            <button class="submit-btn" onclick="postComment()">Submit Comment</button>
+        </div>
+        <div class="comments-list" id="commentsContainer">
+            <div class="comment-item">
+                <div class="comment-meta"><span>Vikram R.</span><span>Just Now</span></div>
+                <div>The Heavyweight Anchor Hoodie is absolutely wild. Worth every rupee!</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ASSISTANCE HELP MODAL WITH ACTIVE CONTACT DETAILS -->
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="toggleHelp(false)">&times;</span>
+            <h3>Captain Support Center</h3>
+            <div class="faq-item">
+                <h4>📞 Live Customer Support</h4>
+                <p>For instant assistance regarding orders, tracking, or bulk updates, call or WhatsApp our official helpline: <a href="tel:+919211290370" class="support-link" style="color: var(--gold); text-decoration: none;">+91 92112 90370</a></p>
+            </div>
+            <div class="faq-item">
+                <h4>📦 Shipping & Delivery</h4>
+                <p>Premium orders are dispatched via express courier within 24 hours. Delivery takes 3-5 business days across India.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function show(cat) {
+            document.querySelectorAll('.grid').forEach(g => g.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(cat).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function toggleHelp(open) {
+            document.getElementById('helpModal').style.display = open ? 'flex' : 'none';
+        }
+
+        function openOverview(title, desc, price, imgUrl) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('modalPrice').innerText = price;
+            document.getElementById('modalImg').src = imgUrl;
+            document.getElementById('overviewModal').style.display = 'flex';
+        }
+
+        function closeOverview() {
+            document.getElementById('overviewModal').style.display = 'none';
+        }
+
+        function triggerWorkInPrg() {
+            alert("⚠️ Work in progress, come later!");
+        }
+
+        function postComment() {
+            const name = document.getElementById('username');
+            const text = document.getElementById('commentText');
+            if(!name.value.trim() || !text.value.trim()) return alert("Fill all fields.");
+            
+            const container = document.getElementById('commentsContainer');
+            const item = document.createElement('div');
+            item.className = 'comment-item';
+            item.innerHTML = `<div class="comment-meta"><span>${name.value}</span><span>Just Now</span></div><div>${text.value}</div>`;
+            container.insertBefore(item, container.firstChild);
+            name.value = ''; text.value = '';
+        }
+    </script>
+</body>
+</html>
